@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AlquilaPC - Cotizador de alquiler de equipos de cómputo portátiles." />
+  <title>AlquilaPC | Cotizador de alquiler</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="pagina">
+    <header class="encabezado">
+      <div class="marca">
+        <span class="marca__icono" aria-hidden="true">PC</span>
+        <div>
+          <p class="marca__etiqueta">SENA · Taller de programación</p>
+          <h1>AlquilaPC</h1>
+        </div>
+      </div>
+      <p class="encabezado__texto">
+        Calcula el valor del alquiler de equipos portátiles por días, con descuentos
+        e incrementos según el lugar de prestación del servicio.
+      </p>
+    </header>
+
+    <section class="tarjeta" aria-labelledby="titulo-formulario">
+      <div class="tarjeta__cabecera">
+        <h2 id="titulo-formulario">Datos de la solicitud</h2>
+        <span class="pildora">Tarifa: $35.000 / día</span>
+      </div>
+
+      <div class="disposicion">
+        <form id="formulario" class="formulario" novalidate>
+          <div class="campo">
+            <label for="nombre">Nombre del cliente</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              placeholder="Ej. Ana María Pérez"
+              autocomplete="name"
+              maxlength="60"
+              required
+            />
+          </div>
+
+          <div class="fila">
+            <div class="campo">
+              <label for="equipos">Número de equipos</label>
+              <input
+                type="number"
+                id="equipos"
+                name="equipos"
+                min="2"
+                step="1"
+                value="2"
+                inputmode="numeric"
+                required
+              />
+              <small>Mínimo 2 equipos.</small>
+            </div>
+
+            <div class="campo">
+              <label for="dias">Días iniciales</label>
+              <input
+                type="number"
+                id="dias"
+                name="dias"
+                min="1"
+                step="1"
+                value="1"
+                inputmode="numeric"
+                required
+              />
+              <small>Al menos 1 día.</small>
+            </div>
+          </div>
+
+          <div class="fila">
+            <div class="campo">
+              <label for="adicionales">Días adicionales</label>
+              <input
+                type="number"
+                id="adicionales"
+                name="adicionales"
+                min="0"
+                step="1"
+                value="0"
+                inputmode="numeric"
+              />
+              <small>Reciben 2 % de descuento.</small>
+            </div>
+
+            <div class="campo">
+              <label for="servicio">Tipo de servicio</label>
+              <select id="servicio" name="servicio">
+                <option value="1">1 · En la ciudad</option>
+                <option value="2">2 · Fuera de la ciudad (+5 %)</option>
+                <option value="3">3 · En el establecimiento (−5 %)</option>
+              </select>
+              <small>El ajuste se aplica al total general.</small>
+            </div>
+          </div>
+
+          <div id="mensaje" class="mensaje" role="alert" aria-live="polite" hidden></div>
+
+          <div class="acciones">
+            <button type="submit" class="boton boton--primario">Calcular alquiler</button>
+            <button type="button" id="btn-limpiar" class="boton boton--secundario">Limpiar formulario</button>
+          </div>
+        </form>
+
+        <aside id="resultado" class="resultado" aria-live="polite" hidden>
+          <div class="resultado__cabecera">
+            <h3>Resumen de la cotización</h3>
+            <p id="resultado-cliente" class="resultado__cliente"></p>
+            <p id="resultado-detalle" class="resultado__detalle"></p>
+          </div>
+
+          <dl class="desglose">
+            <div class="desglose__fila">
+              <dt>Alquiler base</dt>
+              <dd id="valor-base">$ 0</dd>
+            </div>
+            <div class="desglose__fila">
+              <dt>Días adicionales</dt>
+              <dd id="valor-adicional">$ 0</dd>
+            </div>
+            <div class="desglose__fila desglose__fila--descuento" id="fila-descuento-adicional" hidden>
+              <dt>Descuento adicional (2 %)</dt>
+              <dd id="descuento-adicional">-$ 0</dd>
+            </div>
+            <div class="desglose__fila" id="fila-subtotal">
+              <dt>Subtotal</dt>
+              <dd id="valor-subtotal">$ 0</dd>
+            </div>
+            <div class="desglose__fila desglose__fila--descuento" id="fila-establecimiento" hidden>
+              <dt>Descuento establecimiento (5 %)</dt>
+              <dd id="descuento-establecimiento">-$ 0</dd>
+            </div>
+            <div class="desglose__fila desglose__fila--incremento" id="fila-fuera" hidden>
+              <dt>Incremento fuera de la ciudad (5 %)</dt>
+              <dd id="incremento-fuera">+$ 0</dd>
+            </div>
+          </dl>
+
+          <div class="total">
+            <span>Total a pagar</span>
+            <strong id="valor-total">$ 0</strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="tarjeta" aria-labelledby="titulo-registro">
+      <div class="tarjeta__cabecera tarjeta__cabecera--registro">
+        <div>
+          <h2 id="titulo-registro">Registro de clics</h2>
+          <p class="tarjeta__ayuda">
+            Cada interacción registrada guarda la hora exacta del evento (HH:MM:SS).
+          </p>
+        </div>
+        <div class="contador" aria-live="polite">
+          <span class="contador__etiqueta">Clics registrados</span>
+          <strong id="contador-clicks" class="contador__numero">0</strong>
+        </div>
+      </div>
+
+      <div class="registro__acciones">
+        <button type="button" id="btn-click" class="boton boton--primario">
+          Registrar clic
+        </button>
+        <button type="button" id="btn-borrar-registros" class="boton boton--secundario">
+          Borrar registros
+        </button>
+      </div>
+
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <caption class="visualmente-oculto">
+            Historial de clics con número consecutivo, evento y hora
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">N.º</th>
+              <th scope="col">Evento</th>
+              <th scope="col">Hora</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-registros">
+            <tr class="tabla__vacia">
+              <td colspan="3">Aún no hay registros. Calcula un alquiler o pulsa «Registrar clic».</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <p>AlquilaPC · Taller SENA · Tarifa base $35.000 por equipo/día</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

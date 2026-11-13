@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "AlquilaPC",
+    "slug": "alquilapc",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.sena.alquilapc",
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
